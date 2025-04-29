@@ -62,7 +62,7 @@ CreateShortURL = async (full_url, resp) => {
       );
       return resp.json({
         original_url: full_url,
-        short_url: "/api/shorturl/" + count,
+        short_url: count,
       });
     }
   });
