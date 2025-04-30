@@ -42,9 +42,12 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.post("/api/shorturl", function (req, res) {
-  dns.lookup(req.body.url, (err, addr, fam) => {
+  //console.log(req.body.url);
+  console.log(req.body);
+  console.log(dns.lookup(req.body.url), (err)=>{console.error(err)});
+  dns.lookup(req.body.url, (err) => {
     err != null
-      ? res.json({ status: "invalid" })
+      ? res.json({  error: 'invalid url'})
       : CreateShortURL(req.body.url, res);
     //store url after validating
   });
@@ -75,15 +78,16 @@ RetrieveOrignalURL = (shortUrlId) => {
     } else {
       console.log("Go to: " + data[0].fullURL);
 
-      window.open(data[0].fullURL);
+      return data[0].fullURL;
     }
   });
 };
 
 app.get("/api/shorturl/:uriID", function (req, res) {
-  //window.location.replace(
-  RetrieveOrignalURL(req.params.uriID);
-  //);
+  
+  console.log(req.params)
+  if(req.params.uriID == 'undefined'){res.redirect(req.headers.host);}
+  else{res.redirect(RetrieveOrignalURL(req.params.uriID));}
 });
 
 app.listen(port, function () {
